@@ -1,0 +1,54 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:industrial:Tank;1",
+  "@type": "Interface",
+  "displayName": "Tank",
+  "description": "Storage tank model",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "level",
+      "displayName": "Level",
+      "schema": "double",
+      "unit": "percent"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "displayName": "Temperature",
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "@type": "Property",
+      "name": "capacity",
+      "displayName": "Capacity",
+      "schema": "double",
+      "writable": false,
+      "unit": "litre"
+    },
+    {
+      "@type": "Property",
+      "name": "material",
+      "displayName": "Tank Material",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "@type": "Property",
+      "name": "highLevelAlarm",
+      "displayName": "High Level Alarm Setpoint",
+      "schema": "double",
+      "writable": true,
+      "unit": "percent"
+    },
+    {
+      "@type": "Property",
+      "name": "lowLevelAlarm",
+      "displayName": "Low Level Alarm Setpoint",
+      "schema": "double",
+      "writable": true,
+      "unit": "percent"
+    }
+  ]
+}

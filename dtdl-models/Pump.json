@@ -1,0 +1,37 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:industrial:Pump;1",
+  "@type": "Interface",
+  "displayName": "Pump",
+  "description": "Industrial pump with motor",
+  "extends": "dtmi:com:industrial:Motor;1",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "flowRate",
+      "displayName": "Flow Rate",
+      "schema": "double",
+      "unit": "litrePerSecond"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "pressure",
+      "displayName": "Discharge Pressure",
+      "schema": "double",
+      "unit": "bar"
+    },
+    {
+      "@type": "Property",
+      "name": "pumpType",
+      "displayName": "Pump Type",
+      "schema": "string",
+      "writable": false
+    },
+    {
+      "@type": "Relationship",
+      "name": "feedsTo",
+      "displayName": "Feeds To",
+      "target": "dtmi:com:industrial:Tank;1"
+    }
+  ]
+}

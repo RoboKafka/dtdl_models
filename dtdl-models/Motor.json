@@ -1,0 +1,72 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:industrial:Motor;1",
+  "@type": "Interface",
+  "displayName": "Motor",
+  "description": "Industrial motor model",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "current",
+      "displayName": "Current",
+      "schema": "double",
+      "unit": "ampere"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "vibration",
+      "displayName": "Vibration",
+      "schema": "double",
+      "unit": "hertz"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "displayName": "Temperature",
+      "schema": "double",
+      "unit": "degreeCelsius"
+    },
+    {
+      "@type": "Property",
+      "name": "ratedPower",
+      "displayName": "Rated Power",
+      "schema": "double",
+      "writable": false,
+      "unit": "kilowatt"
+    },
+    {
+      "@type": "Property",
+      "name": "status",
+      "displayName": "Operating Status",
+      "schema": {
+        "@type": "Enum",
+        "valueSchema": "string",
+        "enumValues": [
+          {
+            "name": "running",
+            "enumValue": "running"
+          },
+          {
+            "name": "stopped",
+            "enumValue": "stopped"
+          },
+          {
+            "name": "fault",
+            "enumValue": "fault"
+          }
+        ]
+      },
+      "writable": true
+    },
+    {
+      "@type": "Command",
+      "name": "start",
+      "displayName": "Start Motor"
+    },
+    {
+      "@type": "Command",
+      "name": "stop",
+      "displayName": "Stop Motor"
+    }
+  ]
+}

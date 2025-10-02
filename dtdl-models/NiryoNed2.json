@@ -1,0 +1,74 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:robotics:NiryoNed2;1",
+  "@type": "Interface",
+  "displayName": "Niryo Ned2 Robot",
+  "description": "6-axis collaborative robot",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "hardwareVersion",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "connectionStatus",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "calibrationNeeded",
+      "schema": "boolean"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "rpiTemperature",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "cartesianX",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "cartesianY",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "cartesianZ",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint1Position",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint2Position",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint3Position",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint4Position",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint5Position",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "joint6Position",
+      "schema": "double"
+    }
+  ]
+}

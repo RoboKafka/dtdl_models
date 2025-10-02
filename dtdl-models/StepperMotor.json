@@ -1,0 +1,18 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:robotics:StepperMotor;1",
+  "@type": "Interface",
+  "displayName": "Stepper Motor",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "temperature",
+      "schema": "double"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "voltage",
+      "schema": "double"
+    }
+  ]
+}

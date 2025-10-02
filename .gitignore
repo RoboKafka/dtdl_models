@@ -1,0 +1,21 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Generated files
+output/
+tree_diagram.html
+industrial_flow_diagram.html
+industrial_flow_model.json
+connections.json
+
+# Keep templates and models
+!templates/
+!dtdl-models/

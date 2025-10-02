@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>DTDL Tree Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #000;
+            margin-bottom: 30px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .header h1 {
+            color: #000;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .tree-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 2px solid #000;
+            overflow-x: auto;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Tree CSS */
+        .tree {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .tree li {
+            display: inline-table;
+            text-align: center;
+            list-style-type: none;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+        }
+        
+        /* Connectors */
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #000;
+            width: 50%;
+            height: 20px;
+        }
+        
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #000;
+        }
+        
+        .tree li:only-child::after, .tree li:only-child::before {
+            display: none;
+        }
+        
+        .tree li:only-child {
+            padding-top: 0;
+        }
+        
+        .tree li:first-child::before, .tree li:last-child::after {
+            border: 0 none;
+        }
+        
+        .tree li:last-child::before {
+            border-right: 2px solid #000;
+            border-radius: 0 5px 0 0;
+        }
+        
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+        
+        /* Vertical connector from parent */
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #000;
+            width: 0;
+            height: 20px;
+        }
+        
+        /* Node styling */
+        .tree li a {
+            border: 2px solid #000;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #000;
+            font-weight: 500;
+            display: inline-block;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: #fff;
+            position: relative;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        
+        .tree li a:hover {
+            background: #f0f0f0;
+            border-color: #000;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tree li a .node-title {
+            display: block;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .tree li a .node-type {
+            display: block;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+        
+        .tree li a .status-indicator {
+            display: block;
+            font-size: 0.8em;
+            margin-top: 5px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            border: 1px solid #000;
+        }
+        
+        /* Node type specific styling */
+        .pump-node {
+            border-width: 2px;
+        }
+        
+        .pump-node.running {
+            border-style: solid;
+        }
+        
+        .pump-node.stopped {
+            border-style: dashed;
+            opacity: 0.7;
+        }
+        
+        .tank-node {
+            border-width: 2px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 3% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            background: #000;
+            color: white;
+            padding: 25px 30px;
+            border-radius: 16px 16px 0 0;
+            position: relative;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        
+        .modal-header .twin-id {
+            opacity: 0.9;
+            font-size: 0.85em;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        
+        .close:hover {
+            background: rgba(255,255,255,0.2);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+        }
+        
+        .detail-section h3 {
+            color: #000;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        
+        .detail-item {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #000;
+            transition: transform 0.2s;
+        }
+        
+        .detail-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .detail-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .detail-item .value {
+            color: #000;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .detail-item .unit {
+            color: #666;
+            font-size: 0.9em;
+            margin-left: 5px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            background: #fff;
+            border: 2px solid #000;
+            color: #000;
+        }
+        
+        .status-running {
+            border-style: solid;
+        }
+        
+        .status-stopped {
+            border-style: dashed;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌳 DTDL Tree Diagram</h1>
+        <p style="color: #666; margin-top: 10px;">Hierarchical view of connected digital twins - Click any node for details</p>
+    </div>
+    
+    <div class="tree-container">
+        <div class="tree">
+            <ul>
+                {{TREE_CONTENT}}
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Modal for twin details -->
+    <div id="twinModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="modalTitle">Twin Details</h2>
+                <div class="twin-id" id="modalTwinId"></div>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Twin data
+        const twinData = {{TWIN_DATA}};
+        
+        const modelNames = {{MODEL_NAMES}};
+        
+        function showDetails(twinId) {
+            const twin = twinData[twinId];
+            if (!twin) return;
+            
+            const modelName = modelNames[twin.model] || "Unknown";
+            
+            document.getElementById('modalTitle').textContent = modelName;
+            document.getElementById('modalTwinId').textContent = twinId;
+            
+            let html = '';
+            
+            // Properties
+            if (Object.keys(twin.properties).length > 0) {
+                html += '<div class="detail-section"><h3>⚙️ Properties</h3><div class="detail-grid">';
+                
+                for (const [key, value] of Object.entries(twin.properties)) {
+                    let displayValue = value;
+                    
+                    if (key === 'status') {
+                        const statusClass = 'status-' + value;
+                        displayValue = `<span class="status-badge ${statusClass}">${value}</span>`;
+                    } else if (typeof value === 'number') {
+                        displayValue = `<span class="value">${value.toFixed(2)}</span>`;
+                    } else {
+                        displayValue = `<span class="value">${value}</span>`;
+                    }
+                    
+                    html += `<div class="detail-item"><strong>${key}</strong>${displayValue}</div>`;
+                }
+                
+                html += '</div></div>';
+            }
+            
+            // Telemetry
+            if (Object.keys(twin.telemetry).length > 0) {
+                html += '<div class="detail-section"><h3> Live Telemetry</h3><div class="detail-grid">';
+                
+                for (const [key, value] of Object.entries(twin.telemetry)) {
+                    let unit = '';
+                    if (key.includes('temperature')) unit = '°C';
+                    else if (key.includes('current')) unit = 'A';
+                    else if (key.includes('pressure')) unit = 'bar';
+                    else if (key.includes('flow')) unit = 'L/s';
+                    else if (key.includes('level')) unit = '%';
+                    else if (key.includes('vibration')) unit = 'Hz';
+                    
+                    html += `<div class="detail-item"><strong>${key}</strong><span class="value">${typeof value === 'number' ? value.toFixed(2) : value}</span><span class="unit">${unit}</span></div>`;
+                }
+                
+                html += '</div></div>';
+            }
+            
+            // Relationships
+            if (twin.relationships.length > 0) {
+                html += '<div class="detail-section"><h3>🔗 Relationships</h3><div class="detail-grid">';
+                
+                twin.relationships.forEach(rel => {
+                    html += `<div class="detail-item"><strong>${rel.$relationshipName}</strong><span class="value">${rel.$targetId}</span></div>`;
+                });
+                
+                html += '</div></div>';
+            }
+            
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('twinModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('twinModal').style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('twinModal')) {
+                closeModal();
+            }
+        }
+        
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
