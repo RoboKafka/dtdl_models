@@ -1,0 +1,38 @@
+{
+  "@id": "dtmi:com:adt:niryo:motor;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "displayName": "Niryo Motor",
+  "description": "Digital twin model representing a motor or actuator in the Niryo robot.",
+  "comment": "Each motor has basic telemetry like temperature and voltage.",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "joint",
+      "schema": "string",
+      "description": "The joint associated with this motor.",
+      "comment": "For example: J1, J2, etc."
+    },
+    {
+      "@type": "Property",
+      "name": "type",
+      "schema": "string",
+      "description": "Motor type.",
+      "comment": "E.g. stepper, xl430, xl330."
+    },
+    {
+      "@type": "Property",
+      "name": "temperature",
+      "schema": "double",
+      "description": "Current motor temperature in Celsius.",
+      "comment": "Numeric value only."
+    },
+    {
+      "@type": "Property",
+      "name": "voltage",
+      "schema": "double",
+      "description": "Current voltage supplied to the motor.",
+      "comment": "Measured in volts."
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "@id": "dtmi:com:adt:niryo:robot;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "displayName": "Niryo Robot",
+  "description": "Digital twin model for a Niryo Ned2 robot including pose, joint positions, and hardware status.",
+  "comment": "This model represents the overall Niryo robot entity, referencing its motors and location.",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "manufacturer",
+      "schema": "string",
+      "description": "Manufacturer of the robot.",
+      "comment": "For Niryo, this will be 'Niryo'."
+    },
+    {
+      "@type": "Property",
+      "name": "model",
+      "schema": "string",
+      "description": "Model of the robot.",
+      "comment": "For example: 'Ned2'."
+    },
+    {
+      "@type": "Property",
+      "name": "connectionStatus",
+      "schema": "string",
+      "description": "Current connection status of the robot.",
+      "comment": "Values can be UP, DOWN, or UNKNOWN."
+    },
+    {
+      "@type": "Property",
+      "name": "calibrationNeeded",
+      "schema": "boolean",
+      "description": "Flag indicating if calibration is required.",
+      "comment": "True if robot calibration is needed."
+    },
+    {
+      "@type": "Property",
+      "name": "calibrationInProgress",
+      "schema": "boolean",
+      "description": "Flag indicating if calibration is in progress.",
+      "comment": "True while calibration is running."
+    },
+    {
+      "@type": "Property",
+      "name": "errorMessage",
+      "schema": "string",
+      "description": "Current error message from the robot.",
+      "comment": "Empty string if no errors."
+    },
+    {
+      "@type": "Property",
+      "name": "cartesianPose",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          { "name": "x", "schema": "double" },
+          { "name": "y", "schema": "double" },
+          { "name": "z", "schema": "double" },
+          { "name": "roll", "schema": "double" },
+          { "name": "pitch", "schema": "double" },
+          { "name": "yaw", "schema": "double" }
+        ]
+      },
+      "description": "Robot Cartesian pose.",
+      "comment": "Expressed in meters and radians."
+    },
+    {
+      "@type": "Property",
+      "name": "jointPositions",
+      "schema": {
+        "@type": "Map",
+        "mapKey": { "name": "joint", "schema": "string" },
+        "mapValue": { "schema": "double" }
+      },
+      "description": "Joint positions of the robot.",
+      "comment": "Values in radians, keyed by joint names J1..J6."
+    },
+    {
+      "@type": "Property",
+      "name": "hardwareStatus",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          { "name": "rpiTemperature", "schema": "double" },
+          { "name": "version", "schema": "string" }
+        ]
+      },
+      "description": "Hardware information for the embedded controller.",
+      "comment": "Includes CPU temperature and hardware version."
+    },
+    {
+      "@type": "Relationship",
+      "name": "rel_has_motors",
+      "target": "dtmi:com:adt:niryo:motor;1",
+      "description": "Relationship linking the robot to its motors.",
+      "comment": "One Niryo robot can have multiple motor relationships."
+    },
+    {
+      "@type": "Relationship",
+      "name": "rel_is_located_in",
+      "target": "dtmi:com:adt:niryo:location;1",
+      "description": "Relationship linking the robot to a location.",
+      "comment": "Used to connect the robot to a cell, room, or plant."
+    }
+  ]
+}

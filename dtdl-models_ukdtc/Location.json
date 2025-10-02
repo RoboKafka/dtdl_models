@@ -1,0 +1,24 @@
+{
+  "@id": "dtmi:com:adt:niryo:location;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "displayName": "Location",
+  "description": "Generic location entity for the Niryo robot environment.",
+  "comment": "Represents plant, cell, or station where the robot is located.",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "name",
+      "schema": "string",
+      "description": "Location name.",
+      "comment": "Example: Plant1, Cell2, RobotStation1."
+    },
+    {
+      "@type": "Property",
+      "name": "parent",
+      "schema": "string",
+      "description": "Parent location.",
+      "comment": "Allows building a hierarchy like Plant > Cell > Station."
+    }
+  ]
+}
